@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 // CLoginDlg 对话框
 
 class CLoginDlg : public CDialogEx

@@ -6,11 +6,13 @@
 #include "CLoginDlg.h"
 #include "afxdialogex.h"
 #include "ConnectDB.cpp"
-extern Staff LoginStaff;
+#include "string.h"
+//不添加总是爆红
+#include "resource.h"
 // CLoginDlg 对话框
-
+Staff tempworker;
+CLoginDlg* p_CLoginDLg;
 IMPLEMENT_DYNAMIC(CLoginDlg, CDialogEx)
-
 CLoginDlg::CLoginDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(DIALOG_LOGIN, pParent)
 	, m_user(_T(""))
@@ -74,8 +76,14 @@ void CLoginDlg::OnBnClickedButton1()
 	if (worker[i].StaffID == m_user)
 	{
 		if (worker[i].StaffPasswd == m_pwd)
-		{
-			LoginStaff = worker[i];
+		{ 
+			//tempworker = worker[i];
+			tempworker.StaffID=worker[i].StaffID;
+			tempworker.StaffName = worker[i].StaffName;
+			tempworker.StaffPasswd = worker[i].StaffPasswd;
+			tempworker.Staffrwx = worker[i].Staffrwx;
+			strcpy(tempworker.CharStaffID, worker[i].CharStaffID);
+			strcpy(tempworker.CharStaffPasswd, worker[i].CharStaffPasswd);
 			//用户名和密码都正确，关闭对话框
 			CDialog::OnCancel();
 		}
@@ -84,6 +92,7 @@ void CLoginDlg::OnBnClickedButton1()
 			MessageBox(TEXT("密码错误！"));
 		}
 	}
+	mysql_close(GetStaff.mysql);
 }
 
 
@@ -95,6 +104,7 @@ BOOL CLoginDlg::OnInitDialog()
 	//添加默认登录信息
 	m_user = "114514";
 	m_pwd = "1919810";
+	p_CLoginDLg = this;
 	UpdateData(FALSE);
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
@@ -132,3 +142,4 @@ void CLoginDlg::OnCancel()
 	//CDialogEx::OnCancel();
 	exit(0);
 }
+

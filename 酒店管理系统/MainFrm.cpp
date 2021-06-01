@@ -5,9 +5,16 @@
 #include "pch.h"
 #include "framework.h"
 #include "酒店管理系统.h"
+#include "CSelectView.h"
+#include "CDisplayView.h"
+#include "CUserDlg.h"
 
 #include "MainFrm.h"
 #include "ConnectDB.cpp"
+#include "CLoginDlg.h"
+#include "CShowRoom.h"
+extern CLoginDlg* p_CLoginDLg;
+extern Staff tempworker;
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -18,6 +25,24 @@ IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_CREATE()
+
+	//ON_MESSAGE响应的是自定义消息
+//产生NM_X消息，自动调用OnMyChange函数
+	ON_MESSAGE(NM_A, OnMyChange)
+	ON_MESSAGE(NM_B, OnMyChange)
+	ON_MESSAGE(NM_C, OnMyChange)
+	ON_MESSAGE(NM_D, OnMyChange)
+	ON_MESSAGE(NM_E, OnMyChange)
+	ON_MESSAGE(NM_F, OnMyChange)
+	ON_MESSAGE(NM_G, OnMyChange)
+	ON_MESSAGE(NM_H, OnMyChange)
+	ON_MESSAGE(NM_I, OnMyChange)
+	ON_MESSAGE(NM_J, OnMyChange)
+
+
+
+
+
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -75,7 +100,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//0, 0, 起点坐标x和y
 	//800, 500, 窗口宽度和高度
 	MoveWindow(0, 0, 1000,700);
-
+	//p_CLoginDLg->OnBnClickedButton1();
+	CString str1=tempworker.StaffID;
+	MessageBox(str1);
 	//将窗口移动到屏幕中央，CWnd::CenterWindow
 	CenterWindow();
 
@@ -109,3 +136,49 @@ void CMainFrame::Dump(CDumpContext& dc) const
 
 // CMainFrame 消息处理程序
   
+
+
+BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
+{
+	// TODO: 在此添加专用代码和/或调用基类
+
+	//return CFrameWnd::OnCreateClient(lpcs, pContext);
+	//拆成一行两列
+	m_spliter.CreateStatic(this, 1, 2);
+	//左侧
+	m_spliter.CreateView(0, 0, RUNTIME_CLASS(CSelectView), CSize(200, 500),pContext);
+	m_spliter.CreateView(0, 1, RUNTIME_CLASS(CDisplayView), CSize(200, 500), pContext);
+	return TRUE;//手动拆分
+}
+
+LRESULT CMainFrame::OnMyChange(WPARAM wParam, LPARAM lParam) 
+{
+	CCreateContext   Context;
+	if (wParam == NM_A)//个人信息
+	{
+		Context.m_pNewViewClass = RUNTIME_CLASS(CUserDlg);
+		Context.m_pCurrentFrame = this;
+		Context.m_pLastView = (CFormView*)m_spliter.GetPane(0, 1);
+		m_spliter.DeleteView(0, 1);
+		m_spliter.CreateView(0, 1, RUNTIME_CLASS(CUserDlg), CSize(600, 500), &Context);
+		CUserDlg* pNewView = (CUserDlg*)m_spliter.GetPane(0, 1);
+		m_spliter.RecalcLayout();
+		pNewView->OnInitialUpdate();
+		m_spliter.SetActivePane(0, 1);
+
+	}
+	else if (wParam == NM_B)//个人信息
+	{
+		Context.m_pNewViewClass = RUNTIME_CLASS(CShowRoom);
+		Context.m_pCurrentFrame = this;
+		Context.m_pLastView = (CFormView*)m_spliter.GetPane(0, 1);
+		m_spliter.DeleteView(0, 1);
+		m_spliter.CreateView(0, 1, RUNTIME_CLASS(CShowRoom), CSize(600, 500), &Context);
+		CUserDlg* pNewView = (CUserDlg*)m_spliter.GetPane(0, 1);
+		m_spliter.RecalcLayout();
+		pNewView->OnInitialUpdate();
+		m_spliter.SetActivePane(0, 1);
+
+	}
+	return 0;
+}
