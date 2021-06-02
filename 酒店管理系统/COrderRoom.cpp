@@ -4,14 +4,16 @@
 #include "pch.h"
 #include "酒店管理系统.h"
 #include "COrderRoom.h"
-
-
+#include "ConnectDB.cpp"
+int OrderID=0;
 // COrderRoom
 
 IMPLEMENT_DYNCREATE(COrderRoom, CFormView)
 
 COrderRoom::COrderRoom()
 	: CFormView(DIALOG_ORDER_ROOM)
+	, m_order_roomID(_T(""))
+	, m_guestID(_T(""))
 {
 
 }
@@ -25,6 +27,8 @@ void COrderRoom::DoDataExchange(CDataExchange* pDX)
 	CFormView::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_DATETIMEPICKER1, m_begintime);
 	DDX_Control(pDX, IDC_DATETIMEPICKER2, m_endtime);
+	DDX_Text(pDX, IDC_EDIT1, m_order_roomID);
+	DDX_Text(pDX, IDC_EDIT2, m_guestID);
 }
 
 BEGIN_MESSAGE_MAP(COrderRoom, CFormView)
@@ -67,6 +71,11 @@ void COrderRoom::OnBnClickedButton1()
 	// TODO: 在此添加控件通知处理程序代码
 	m_begintime.GetTime(BeginTime);
 	m_endtime.GetTime(EndTime);
+	if (BeginTime > EndTime)
+	{
+		MessageBox(TEXT("订房起始时间不可以晚于结束时间，订房失败！"));
+		return;
+	}
 	int BeginYear,BeginMonth,BeginDay,EndYear,EndMonth,EndDay;
 	BeginYear =BeginTime.GetYear();
 	BeginMonth = BeginTime.GetMonth();
@@ -81,4 +90,13 @@ void COrderRoom::OnBnClickedButton1()
 	CEndYear.Format(_T("%d"), EndYear);
 	CEndMonth.Format(_T("%d"), EndMonth);
 	CEndDay.Format(_T("%d"), EndDay);
+
+	DataBase A;
+	CString status;
+	A.ConnectDatabase(status);
+
+
+
+
+	MessageBox(TEXT("订房成功！"));
 }

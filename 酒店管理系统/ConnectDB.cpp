@@ -24,6 +24,12 @@ public:
     CString RoomPrice;
     CString StaffName;
 };
+class Guest {
+public:
+    CString GuestID;
+    CString GuestName;
+    CString PhoneNumber;
+};
 class DataBase {
 public:
 	MYSQL* mysql = new MYSQL; //mysql连接  
@@ -38,7 +44,7 @@ public:
         //初始化mysql  
         mysql_init(mysql);
         //返回false则连接失败，返回true则连接成功  
-        if (!(mysql_real_connect(mysql, "wanglifa.f3322.net", "root", "123456", "hotel", 3306, NULL, 0))) //中间分别是主机，用户名，密码，数据库名，端口号（可以写默认0或者3306等），可以先写成参数再传进去  
+        if (!(mysql_real_connect(mysql, "wanglifa.f3322.net", "root", "1234568", "hotel", 3306, NULL, 0))) //中间分别是主机，用户名，密码，数据库名，端口号（可以写默认0或者3306等），可以先写成参数再传进去  
         {
             status.Format(_T("Error connecting to database:\n%S"), mysql_error(mysql));
             return false;
@@ -85,17 +91,10 @@ public:
         int i = 0;
         while (column = mysql_fetch_row(res))
         {
-            char strID[100] = {};
-            char strPasswd[100] = {};
-            strcpy(strID, column[0]);
-            strcpy(strPasswd, column[2]);
-            worker1[i].StaffID.Format(_T("%S"), column[0]);
-            worker1[i].StaffName.Format(_T("%S"), column[1]);
-            worker1[i].StaffPasswd.Format(_T("%S"), column[2]);
-            worker1[i].Staffrwx.Format(_T("%S"), column[3]);
-            strcpy(worker1[i].CharStaffID, strID);
-            /*strcpy(worker1[i].CharStaffName, column[1]);*/
-            strcpy(worker1[i].CharStaffPasswd, column[2]);
+            worker1[i].StaffID = column[0];
+            worker1[i].StaffName = column[1];
+            worker1[i].StaffPasswd = column[2];
+            worker1[i].Staffrwx= column[3];
             i++;
         }
         return true;
@@ -173,13 +172,107 @@ public:
     {
         mysql_close(A.mysql);
     }
+    bool QueryGuest(int& GuestNum, Guest *guest)//查房间
+    {
+        sprintf_s(query, "select * from guest"); //执行查询语句，这里是查询所有，user是表名，不用加引号，用strcpy也可以  
+        mysql_query(mysql, "set names gb2312"); //设置编码格式（SET NAMES GBK也行），否则cmd下中文乱码  
+        //返回0 查询成功，返回1查询失败  
+        if (mysql_query(mysql, query))    //执行SQL语句
+        {
+            printf("Query failed (%s)\n", mysql_error(mysql));
+            return false;
+        }
+        else
+        {
+            //MessageBox(NULL, TEXT("成功"), TEXT("ASJAS"), 0);
+            printf("query success\n");
+        }
+        //获取结果集  
+        if (!(res = mysql_store_result(mysql)))   //获得sql语句结束后返回的结果集  
+        {
+            
+            GuestNum = 0;
+            return false;
+        }
+
+        //打印数据行数  
+        GuestNum = mysql_affected_rows(mysql);
+        //获取字段的信息  
+        char* str_field[100];  //定义一个字符串数组存储字段信息  
+        for (int i = 0; i < 3; i++)  //在已知字段数量的情况下获取字段名  
+        {
+            str_field[i] = mysql_fetch_field(res)->name;
+        }
+        int i = 0;
+        while (column = mysql_fetch_row(res))
+        {
+            guest[i].GuestID = column[0];
+            guest[i].GuestName = column[1];
+            guest[i].PhoneNumber = column[2];
+            i++;
+        }
+        return true;
+    }
+    bool AddGuest(CString NewGuestID,CString NewGuestName,CString NewGuestPhone)//查房间
+    {
+        CString QueryArray = TEXT("INSERT INTO `hotel`.`guest` (`GuestID`, `Name`, `PhoneNumber`) VALUES (");
+        QueryArray += NewGuestID;
+        QueryArray += TEXT(", \'");
+        QueryArray += NewGuestName;
+        QueryArray += TEXT("\', ");
+        QueryArray += NewGuestPhone;
+        QueryArray += TEXT(")");
+        CStringA temp;
+        temp = QueryArray;
+        sprintf_s(query, temp.GetBuffer()); //执行查询语句，这里是查询所有，user是表名，不用加引号，用strcpy也可以  
+        mysql_query(mysql, "set names gb2312"); //设置编码格式（SET NAMES GBK也行），否则cmd下中文乱码  
+        //返回0 查询成功，返回1查询失败  
+        if (mysql_query(mysql, query))    //执行SQL语句
+        {
+            printf("Query failed (%s)\n", mysql_error(mysql));
+            return false;
+        }
+        else
+        {
+            //MessageBox(NULL, TEXT("成功"), TEXT("ASJAS"), 0);
+            printf("query success\n");
+        }
+        //获取结果集  
+        if (!(res = mysql_store_result(mysql)))   //获得sql语句结束后返回的结果集  
+        {
+
+            return false;
+        }
+        return true;
+    }
+    bool OrderRoom()
+    {
+        CString QueryArray = TEXT("INSERT INTO `hotel`.`guest` (`GuestID`, `Name`, `PhoneNumber`) VALUES (");
+        CStringA temp;
+        temp = QueryArray;
+        sprintf_s(query, temp.GetBuffer()); //执行查询语句，这里是查询所有，user是表名，不用加引号，用strcpy也可以  
+        mysql_query(mysql, "set names gb2312"); //设置编码格式（SET NAMES GBK也行），否则cmd下中文乱码  
+        //返回0 查询成功，返回1查询失败  
+        if (mysql_query(mysql, query))    //执行SQL语句
+        {
+            printf("Query failed (%s)\n", mysql_error(mysql));
+            return false;
+        }
+        else
+        {
+            //MessageBox(NULL, TEXT("成功"), TEXT("ASJAS"), 0);
+            printf("query success\n");
+        }
+        //获取结果集  
+        if (!(res = mysql_store_result(mysql)))   //获得sql语句结束后返回的结果集  
+        {
+
+            return false;
+        }
+        return true;
+    }
 };
-class Guest {
-public:
-    CString GuestID;
-    CString Name;
-    CString PhoneNumber;
-};
+
 class CstringChar {
 public:
     /*char* __Ary_(CString str)

@@ -35,6 +35,10 @@ public:
 	afx_msg void OnBnClickedButton1();
 private:
 	CDateTimeCtrl m_endtime;
+public:
+	CString m_order_roomID;
+private:
+	CString m_guestID;
 };
 
 

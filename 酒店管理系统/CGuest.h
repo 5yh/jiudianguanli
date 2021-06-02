@@ -27,6 +27,18 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnLvnItemchangedList1(NMHDR* pNMHDR, LRESULT* pResult);
+private:
+	CListCtrl m_list_guest;
+public:
+	virtual void OnInitialUpdate();
+private:
+	CString m_NewGuestID;
+	CString m_NewGuestName;
+	CString m_NewGuestPhone;
+public:
+	afx_msg void OnBnClickedButton2();
 };
 
 
