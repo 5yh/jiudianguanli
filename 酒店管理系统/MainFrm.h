@@ -5,10 +5,10 @@
 #pragma once
 
 //自定义消息时间
-#define NM_A	(WM_USER + 100)
-#define NM_B	(WM_USER + 101)
-#define NM_C	(WM_USER + 102)
-#define NM_D	(WM_USER + 103)
+#define NM_A	(WM_USER + 100)//个人信息
+#define NM_B	(WM_USER + 101)//房间信息
+#define NM_C	(WM_USER + 102)//订购房间
+#define NM_D	(WM_USER + 103)//房客登记
 #define NM_E	(WM_USER + 104)
 #define NM_F	(WM_USER + 105)
 #define NM_G	(WM_USER + 106)

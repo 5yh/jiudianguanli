@@ -189,8 +189,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CDisplayView.h" />
+    <ClInclude Include="CGuest.h" />
     <ClInclude Include="CLoginDlg.h" />
     <ClInclude Include="ConnectDB.h" />
+    <ClInclude Include="COrderRoom.h" />
     <ClInclude Include="CSelectView.h" />
     <ClInclude Include="CShowRoom.h" />
     <ClInclude Include="CUserDlg.h" />
@@ -205,8 +207,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDisplayView.cpp" />
+    <ClCompile Include="CGuest.cpp" />
     <ClCompile Include="CLoginDlg.cpp" />
     <ClCompile Include="ConnectDB.cpp" />
+    <ClCompile Include="COrderRoom.cpp" />
     <ClCompile Include="CSelectView.cpp" />
     <ClCompile Include="CShowRoom.cpp" />
     <ClCompile Include="CUserDlg.cpp" />

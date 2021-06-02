@@ -8,6 +8,8 @@
 #include "CSelectView.h"
 #include "CDisplayView.h"
 #include "CUserDlg.h"
+#include "COrderRoom.h"
+#include "CGuest.h"
 
 #include "MainFrm.h"
 #include "ConnectDB.cpp"
@@ -167,13 +169,39 @@ LRESULT CMainFrame::OnMyChange(WPARAM wParam, LPARAM lParam)
 		m_spliter.SetActivePane(0, 1);
 
 	}
-	else if (wParam == NM_B)//个人信息
+	else if (wParam == NM_B)//房间信息
 	{
 		Context.m_pNewViewClass = RUNTIME_CLASS(CShowRoom);
 		Context.m_pCurrentFrame = this;
 		Context.m_pLastView = (CFormView*)m_spliter.GetPane(0, 1);
 		m_spliter.DeleteView(0, 1);
 		m_spliter.CreateView(0, 1, RUNTIME_CLASS(CShowRoom), CSize(600, 500), &Context);
+		CUserDlg* pNewView = (CUserDlg*)m_spliter.GetPane(0, 1);
+		m_spliter.RecalcLayout();
+		pNewView->OnInitialUpdate();
+		m_spliter.SetActivePane(0, 1);
+
+	}
+	else if (wParam == NM_C)//订购房间
+	{
+		Context.m_pNewViewClass = RUNTIME_CLASS(COrderRoom);
+		Context.m_pCurrentFrame = this;
+		Context.m_pLastView = (CFormView*)m_spliter.GetPane(0, 1);
+		m_spliter.DeleteView(0, 1);
+		m_spliter.CreateView(0, 1, RUNTIME_CLASS(COrderRoom), CSize(600, 500), &Context);
+		CUserDlg* pNewView = (CUserDlg*)m_spliter.GetPane(0, 1);
+		m_spliter.RecalcLayout();
+		pNewView->OnInitialUpdate();
+		m_spliter.SetActivePane(0, 1);
+
+	}
+	else if (wParam == NM_D)//房客登记
+	{
+		Context.m_pNewViewClass = RUNTIME_CLASS(CGuest);
+		Context.m_pCurrentFrame = this;
+		Context.m_pLastView = (CFormView*)m_spliter.GetPane(0, 1);
+		m_spliter.DeleteView(0, 1);
+		m_spliter.CreateView(0, 1, RUNTIME_CLASS(CGuest), CSize(600, 500), &Context);
 		CUserDlg* pNewView = (CUserDlg*)m_spliter.GetPane(0, 1);
 		m_spliter.RecalcLayout();
 		pNewView->OnInitialUpdate();

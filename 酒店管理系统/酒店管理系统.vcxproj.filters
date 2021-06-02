@@ -57,6 +57,12 @@
     <ClInclude Include="CShowRoom.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="COrderRoom.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGuest.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="酒店管理系统.cpp">
@@ -90,6 +96,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CShowRoom.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="COrderRoom.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGuest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

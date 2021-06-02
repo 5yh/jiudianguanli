@@ -59,7 +59,8 @@ void CSelectView::OnInitialUpdate()
 	// 	   添加节点
 	m_treectrl->InsertItem(TEXT("个人信息"), 0, 0, NULL);
 	m_treectrl->InsertItem(TEXT("房间信息"), 0, 0, NULL);
-	m_treectrl->InsertItem(TEXT("房客信息"), 0, 0, NULL);
+	m_treectrl->InsertItem(TEXT("订购房间"), 0, 0, NULL);
+	m_treectrl->InsertItem(TEXT("房客登记"), 0, 0, NULL);
 
 
 
@@ -102,6 +103,14 @@ void CSelectView::OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 	else if (listinf == TEXT("房间信息"))
 	{
 		::PostMessage(AfxGetMainWnd()->GetSafeHwnd(), NM_B, (WPARAM)NM_B, (LPARAM)0);
+	}
+	else if (listinf == TEXT("订购房间"))
+	{
+		::PostMessage(AfxGetMainWnd()->GetSafeHwnd(), NM_C, (WPARAM)NM_C, (LPARAM)0);
+	}
+	else if (listinf == TEXT("房客登记"))
+	{
+		::PostMessage(AfxGetMainWnd()->GetSafeHwnd(), NM_D, (WPARAM)NM_D, (LPARAM)0);
 	}
 
 }

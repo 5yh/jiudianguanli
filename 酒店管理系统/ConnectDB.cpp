@@ -21,6 +21,8 @@ public:
     CString RoomID;
     CString RoomType;
     CString RoomAddress;
+    CString RoomPrice;
+    CString StaffName;
 };
 class DataBase {
 public:
@@ -29,7 +31,7 @@ public:
 	char field[32][32];    //存字段名二维数组  
 	MYSQL_RES* res; //这个结构代表返回行的一个查询结果集  
 	MYSQL_ROW column; //一个行数据的类型安全(type-safe)的表示，表示数据行的列  
-	char query[150]; //查询语句  
+	char query[300]; //查询语句  
 
     bool ConnectDatabase(CString &status)
     {
@@ -124,7 +126,8 @@ public:
     }
     bool QueryRoom(int& RoomNum, Room* room)//查房间
     {
-        sprintf_s(query, "select * from room"); //执行查询语句，这里是查询所有，user是表名，不用加引号，用strcpy也可以  
+        char A[299] = "SELECT room.RoomID,room.RoomType,RoomAddress,RoomPrice,StaffName FROM `room`,roomtypesize, roommanage, staff WHERE room.RoomType = roomtypesize.RoomType AND room.RoomID = roommanage.RoomID AND roommanage.StaffID = staff.StaffID";
+        sprintf_s(query, A); //执行查询语句，这里是查询所有，user是表名，不用加引号，用strcpy也可以  
         mysql_query(mysql, "set names gb2312"); //设置编码格式（SET NAMES GBK也行），否则cmd下中文乱码  
         //返回0 查询成功，返回1查询失败  
         if (mysql_query(mysql, query))    //执行SQL语句
@@ -146,7 +149,7 @@ public:
         //打印数据行数  
         RoomNum = mysql_affected_rows(mysql);
         //获取字段的信息  
-        char* str_field[32];  //定义一个字符串数组存储字段信息  
+        char* str_field[100];  //定义一个字符串数组存储字段信息  
         for (int i = 0; i < 3; i++)  //在已知字段数量的情况下获取字段名  
         {
             str_field[i] = mysql_fetch_field(res)->name;
@@ -160,10 +163,22 @@ public:
             room[i].RoomID = column[0];
             room[i].RoomType = column[1];
             room[i].RoomAddress = column[2];
+            room[i].RoomPrice = column[3];
+            room[i].StaffName = column[4];
             i++;
         }
         return true;
     }
+    void CloseConnection(DataBase A)
+    {
+        mysql_close(A.mysql);
+    }
+};
+class Guest {
+public:
+    CString GuestID;
+    CString Name;
+    CString PhoneNumber;
 };
 class CstringChar {
 public:

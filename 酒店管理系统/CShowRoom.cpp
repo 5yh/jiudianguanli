@@ -71,11 +71,11 @@ void CShowRoom::OnInitialUpdate()
 	Room* room = new Room[10];
 	A.QueryRoom(RoomNum, room);
 	//列表控件添加值
-	CString RoomListTable[] = { TEXT("房间号"),TEXT("房间类型") ,TEXT("房间地址") };
-	for (int i = 0; i < 3; i++)
+	CString RoomListTable[] = { TEXT("房间号"),TEXT("房间类型") ,TEXT("房间地址"),TEXT("房间价格"),TEXT("管理员工") };
+	for (int i = 0; i < 5; i++)
 	{
 		//设置表头
-		m_list_room.InsertColumn(i, RoomListTable[i],LVCFMT_LEFT,150);
+		m_list_room.InsertColumn(i, RoomListTable[i],LVCFMT_LEFT,100);
 	}
 	//设置正文
 
@@ -85,5 +85,8 @@ void CShowRoom::OnInitialUpdate()
 		//给这个item插入数据
 		m_list_room.SetItemText(i, 1, room[i].RoomType);
 		m_list_room.SetItemText(i, 2, room[i].RoomAddress);
+		m_list_room.SetItemText(i, 3, room[i].RoomPrice);
+		m_list_room.SetItemText(i, 4, room[i].StaffName);
 	}
+	A.CloseConnection(A);
 }
